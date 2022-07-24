@@ -8,8 +8,10 @@ const Review = db.reviews
 
 //method index
 const index = async (req, res) => {
-    let products = Product.findAll({})
-    res.status(200).send(products)
+    let p = await Product.findAll({}).then((data) => {
+        return data
+    })
+    res.send(p)
 }
 
 // method create
@@ -21,32 +23,38 @@ const addProduct = async (req, res) => {
         description: req.body.description,
         published: req.body.published
     }
-    const product = await Product.create(info)
-    res.status(200).send(product)
-    console.log(product)
+    const product = await Product.create(info).then((data) => {
+        res.status(200).send({
+            "message": "Data Added"
+        })
+    })
 }
 
 //method show
 const show = async (req, res) => {
     let id = req.params.id
-    let products = Product.findOne({
+    Product.findOne({
         where: {
             id: id
         }
+    }).then((data) => {
+        res.send(data)
     })
-    res.status(200).send(products)
+    // res.status(200).send(products)
 }
 
 //method update 
 const update = async (req, res) => {
-
     let id = req.params.id
     const product = await Product.update(req.body, {
         where: {
             id: id
         }
+    }).then((data) => {
+        res.status(200).send({
+            "message": "Data Updated"
+        })
     })
-    res.status(200).send(product)
 }
 
 //method destroy
@@ -57,8 +65,11 @@ const destroy = async (req, res) => {
         where: {
             id: id
         }
+    }).then((data) => {
+        res.status(200).send({
+            "message": "Data Deleted"
+        })
     })
-    res.status(200).send("product is deleted")
 }
 
 //method published
@@ -68,6 +79,8 @@ const published = async (req, res) => {
         where: {
             published: true
         }
+    }).then((data) => {
+        return data
     })
     res.status(200).send(product)
 }

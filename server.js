@@ -1,14 +1,22 @@
 const express = require('express')
-const layout = require('express-layout')
+const expressLayouts = require('express-ejs-layouts')
 const cors = require('cors')
 
 
 const app = express()
 
 const corsOption = {
-    origin: 'https://localhost:8081'
+    origin: 'http://localhost' // url front end
 }
 
+app.set('view engine', 'ejs')
+app.use(expressLayouts)
+
+app.get('/', (req, res) => {
+    res.render('index', {
+        layout: 'main',
+    })
+})
 
 
 //middleware
@@ -21,11 +29,7 @@ const router = require('./routes/productRouter.js')
 app.use('/api/product', router)
 
 //testing api
-app.get('/', (req, res) => {
-    res.json({
-        message: "Hello from api"
-    })
-})
+
 //PORT
 const PORT = process.env.PORT || 8080
 
