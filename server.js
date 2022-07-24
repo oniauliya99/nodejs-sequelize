@@ -9,12 +9,16 @@ const corsOption = {
     origin: 'https://localhost:8081'
 }
 
+
+
 //middleware
 app.use(cors(corsOption))
 app.use(express.json())
 app.use(express.urlencoded({
     extended: true
 }))
+const router = require('./routes/productRouter.js')
+app.use('/api/product', router)
 
 //testing api
 app.get('/', (req, res) => {

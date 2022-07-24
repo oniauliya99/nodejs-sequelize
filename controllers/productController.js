@@ -7,13 +7,14 @@ const Product = db.products
 const Review = db.reviews
 
 //method index
-const getAllProducts = async (req, res) => {
+const index = async (req, res) => {
     let products = Product.findAll({})
-    res.status.send(products)
+    res.status(200).send(products)
 }
 
 // method create
 const addProduct = async (req, res) => {
+    console.log(req.body)
     let info = {
         title: req.body.title,
         price: req.body.price,
@@ -26,7 +27,7 @@ const addProduct = async (req, res) => {
 }
 
 //method show
-const getOneProducts = async (req, res) => {
+const show = async (req, res) => {
     let id = req.params.id
     let products = Product.findOne({
         where: {
@@ -37,7 +38,7 @@ const getOneProducts = async (req, res) => {
 }
 
 //method update 
-const updateProducts = async (req, res) => {
+const update = async (req, res) => {
 
     let id = req.params.id
     const product = await Product.update(req.body, {
@@ -46,4 +47,36 @@ const updateProducts = async (req, res) => {
         }
     })
     res.status(200).send(product)
+}
+
+//method destroy
+const destroy = async (req, res) => {
+
+    let id = req.params.id
+    await Product.destroy({
+        where: {
+            id: id
+        }
+    })
+    res.status(200).send("product is deleted")
+}
+
+//method published
+const published = async (req, res) => {
+
+    const product = await Product.findAll({
+        where: {
+            published: true
+        }
+    })
+    res.status(200).send(product)
+}
+
+module.exports = {
+    index,
+    show,
+    addProduct,
+    update,
+    destroy,
+    published
 }
